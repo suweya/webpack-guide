@@ -1,12 +1,24 @@
 const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ManifestPlugin = require("webpack-manifest-plugin");
 
 module.exports = {
   mode: "development",
-  entry: path.resolve(__dirname, "./src/index.js"),
+  entry: {
+    app: "./src/index.js",
+    print: "./src/print.js"
+  },
   output: {
-    filename: "main.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist")
   },
-  plugins: [new htmlWebpackPlugin({ template: "./index.html" })]
+  plugins: [
+    new htmlWebpackPlugin({
+      template: "./index.html",
+      title: "Output Management"
+    }),
+    new CleanWebpackPlugin(),
+    new ManifestPlugin()
+  ]
 };

@@ -2,16 +2,17 @@ const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   mode: "development",
   devtool: "inline-source-map",
   devServer: {
-    contentBase: "./dist"
+    contentBase: "./dist",
+    hot: true
   },
   entry: {
-    app: "./src/index.js",
-    print: "./src/print.js"
+    app: "./src/index.js"
   },
   output: {
     filename: "[name].bundle.js",
@@ -24,6 +25,15 @@ module.exports = {
       title: "Output Management"
     }),
     new CleanWebpackPlugin(),
-    new ManifestPlugin()
-  ]
+    new ManifestPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      }
+    ]
+  }
 };

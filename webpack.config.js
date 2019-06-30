@@ -3,10 +3,18 @@ const htmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: path.resolve(__dirname, "./src/index.js"),
+  entry: {
+    index: path.resolve(__dirname, "./src/index.js"),
+    another: path.resolve(__dirname, "./src/another-module.js")
+  },
   output: {
-    filename: "main.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist")
   },
-  plugins: [new htmlWebpackPlugin({ template: "./index.html" })]
+  plugins: [new htmlWebpackPlugin({ template: "./index.html" })],
+  optimization: {
+    splitChunks: {
+      chunks: "all"
+    }
+  }
 };

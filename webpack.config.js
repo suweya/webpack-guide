@@ -1,5 +1,6 @@
 const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   mode: "development",
@@ -7,14 +8,24 @@ module.exports = {
     index: path.resolve(__dirname, "./src/index.js")
   },
   output: {
-    filename: "[name].bundle.js",
+    filename: "[name].[contenthash].js",
     path: path.resolve(__dirname, "dist"),
-    chunkFilename: "[name].chunk.js"
+    chunkFilename: "[name].[contenthash].js"
   },
-  plugins: [new htmlWebpackPlugin({ template: "./index.html" })],
+  plugins: [
+    new htmlWebpackPlugin({ template: "./index.html" })
+    // new webpack.HashedModuleIdsPlugin()
+  ],
   optimization: {
     splitChunks: {
-      chunks: "all"
-    }
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
+        }
+      }
+    },
+    runtimeChunk: "single"
   }
 };
